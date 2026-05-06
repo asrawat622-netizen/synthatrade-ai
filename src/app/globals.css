@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-ink-950 text-ink-100 antialiased;
+  }
+  body {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(59,98,255,0.08), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(139,92,246,0.06), transparent 50%),
+      #070914;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-ink-900/60 backdrop-blur-md border border-ink-700/60;
+  }
+  .card {
+    @apply rounded-xl bg-ink-900/70 border border-ink-700/60 p-5 shadow-lg shadow-black/20;
+  }
+  .stat-card {
+    @apply rounded-xl bg-gradient-to-br from-ink-800/80 to-ink-900/80 border border-ink-700/60 p-4 sm:p-5;
+  }
+  .input {
+    @apply w-full rounded-lg bg-ink-800/80 border border-ink-700 px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-brand-500/60 focus:border-brand-500
+           placeholder-ink-400 text-ink-100;
+  }
+  .label {
+    @apply text-xs font-medium text-ink-300 mb-1.5 block uppercase tracking-wide;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-brand-gradient text-white shadow-lg shadow-brand-500/25 hover:shadow-brand-500/50
+           hover:scale-[1.02] active:scale-[0.99];
+  }
+  .btn-secondary {
+    @apply btn bg-ink-800 text-ink-100 border border-ink-700 hover:bg-ink-700;
+  }
+  .btn-ghost {
+    @apply btn text-ink-200 hover:bg-ink-800/60;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  .badge-win {
+    @apply badge bg-teal-500/20 text-teal-400 border border-teal-500/30;
+  }
+  .badge-loss {
+    @apply badge bg-red-500/20 text-red-400 border border-red-500/30;
+  }
+  .badge-be {
+    @apply badge bg-ink-700 text-ink-200 border border-ink-600;
+  }
+  .badge-tag {
+    @apply badge bg-brand-500/15 text-brand-300 border border-brand-500/30;
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-brand-gradient;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1a2244; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2a3461; }
+
+/* Recharts dark text */
+.recharts-text { fill: #b6bfd8 !important; font-size: 11px !important; }
+.recharts-cartesian-grid line { stroke: #1a2244 !important; }
+.recharts-cartesian-axis-line { stroke: #2a3461 !important; }
+.recharts-cartesian-axis-tick-line { stroke: #2a3461 !important; }
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: #0b0f1f !important;
+  border: 1px solid #1a2244 !important;
+  border-radius: 8px !important;
+}

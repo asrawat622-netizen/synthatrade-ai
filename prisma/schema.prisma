@@ -1,0 +1,147 @@
+// SynthaTrade AI – Prisma Schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String          @id @default(cuid())
+  name            String?
+  email           String          @unique
+  emailVerified   DateTime?
+  image           String?
+  passwordHash    String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Trading preferences
+  preferredInstruments String[]   @default([])
+  propFirmMode         Boolean    @default(false)
+  dailyDrawdownLimit   Float?
+  maxDrawdownLimit     Float?
+  profitTarget         Float?
+  accountSize          Float?
+  plan                 String     @default("free") // free | pro | elite
+
+  trades          Trade[]
+  journals        DailyJournal[]
+  tags            Tag[]
+  accounts        Account[]
+  sessions        Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Trade {
+  id            String     @id @default(cuid())
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date          DateTime
+  instrument    String
+  direction     String     // "Long" | "Short"
+  entryPrice    Float
+  exitPrice     Float
+  stopLoss      Float?
+  takeProfit    Float?
+  positionSize  Float       @default(1)
+
+  pnlPoints     Float
+  pnlDollars    Float
+  result        String     // "Win" | "Loss" | "BE"
+
+  session       String?    // Asia | London | NY | NY Open | NY Lunch | NY PM
+  timeframe     String?    // 1m, 5m, 15m, 1h, 4h, 1D
+  notes         String?    @db.Text
+  emotionBefore Int?       // 1-10
+  emotionAfter  Int?       // 1-10
+  confidence    Int?       // 1-10
+  ruleBreak     Boolean    @default(false)
+  screenshotUrl String?
+
+  riskReward    Float?
+  rMultiple     Float?
+
+  tradeTags     TradeTag[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([userId, date])
+  @@index([userId, instrument])
+  @@index([userId, session])
+}
+
+model Tag {
+  id        String     @id @default(cuid())
+  name      String
+  color     String?    @default("#3b62ff")
+  userId    String?
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tradeTags TradeTag[]
+  createdAt DateTime   @default(now())
+
+  @@unique([userId, name])
+}
+
+model TradeTag {
+  tradeId String
+  tagId   String
+  trade   Trade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  tag     Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([tradeId, tagId])
+  @@index([tagId])
+}
+
+model DailyJournal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime
+  sleepHours  Float?
+  stressLevel Int?    // 1-10
+  focusLevel  Int?    // 1-10
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
