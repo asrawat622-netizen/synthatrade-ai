@@ -57,7 +57,6 @@ type Analytics = {
   }[];
   tagCombinations: {
     combo: string;
-    tags: string[];
     trades: number;
     winRate: number;
     pnl: number;
@@ -344,13 +343,13 @@ export default function AnalyticsPage() {
             </p>
           ) : (
             <ul className="space-y-2">
-              {bestCombos.map((c) => (
+             {bestCombos.map((c) => (
                 <li
                   key={c.combo}
                   className="flex items-center justify-between py-2 border-b border-ink-800 last:border-0"
                 >
                   <div className="flex flex-wrap gap-1">
-                    {c.tags.map((t) => (
+                    {c.combo.split(" + ").map((t) => (
                       <span key={t} className="badge-tag">
                         {t}
                       </span>
@@ -386,7 +385,7 @@ export default function AnalyticsPage() {
                   className="flex items-center justify-between py-2 border-b border-ink-800 last:border-0"
                 >
                   <div className="flex flex-wrap gap-1">
-                    {c.tags.map((t) => (
+                    c.combo.split(" + ").map((t) => (
                       <span key={t} className="badge-tag">
                         {t}
                       </span>
