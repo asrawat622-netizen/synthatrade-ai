@@ -135,7 +135,6 @@ export default function AnalyticsPage() {
         </p>
       </div>
 
-      {/* Top metrics grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
           label="Total PnL"
@@ -201,20 +200,18 @@ export default function AnalyticsPage() {
         />
         <StatCard
           label="Rule break rate"
-          value={`${m.ruleBreakRate}%`}
+          value={`${(m.ruleBreakRate * 100).toFixed(1)}%`}
           hint={`${m.ruleBreakCount} trades`}
           icon={AlertTriangle}
-          trend={m.ruleBreakRate > 15 ? "down" : "neutral"}
+          trend={m.ruleBreakRate > 0.15 ? "down" : "neutral"}
         />
       </div>
 
-      {/* Equity curve */}
       <div className="card">
         <h2 className="font-semibold mb-4">Equity curve</h2>
         <EquityChart data={data.equityCurve} />
       </div>
 
-      {/* Distribution + after-loss analysis */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
           <h2 className="font-semibold mb-4">PnL distribution</h2>
@@ -260,7 +257,6 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Day of week + Session */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
           <h2 className="font-semibold mb-4">PnL by day of week</h2>
@@ -272,13 +268,11 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* By hour */}
       <div className="card">
         <h2 className="font-semibold mb-4">PnL by hour of day</h2>
         <HourChart data={data.byHour} />
       </div>
 
-      {/* Tag performance table */}
       <div className="card">
         <h2 className="font-semibold mb-4">Tag performance</h2>
         <div className="overflow-x-auto">
@@ -330,7 +324,6 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Tag combinations */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
           <h2 className="font-semibold mb-1">Top combinations</h2>
@@ -343,7 +336,7 @@ export default function AnalyticsPage() {
             </p>
           ) : (
             <ul className="space-y-2">
-             {bestCombos.map((c) => (
+              {bestCombos.map((c) => (
                 <li
                   key={c.combo}
                   className="flex items-center justify-between py-2 border-b border-ink-800 last:border-0"
@@ -385,7 +378,7 @@ export default function AnalyticsPage() {
                   className="flex items-center justify-between py-2 border-b border-ink-800 last:border-0"
                 >
                   <div className="flex flex-wrap gap-1">
-                    c.combo.split(" + ").map((t) => (
+                    {c.combo.split(" + ").map((t) => (
                       <span key={t} className="badge-tag">
                         {t}
                       </span>
